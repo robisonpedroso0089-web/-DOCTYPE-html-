@@ -1,0 +1,26 @@
+ps = np.linspace(0, 0.5, frames)
+valores = [expect(M, depolarizing_channel(rho_pure, p, N)) for p in ps]
+
+fig, ax = plt.subplots(figsize=(12, 7))
+plt.style.use('dark_background')
+
+line, = ax.plot(ps[0:1], valores[0:1], color='#ff0044', lw=4)
+ax.axhline(y=2, color='#00ff41', ls='--', label='Limite Clássico - ESMAGADO')
+ax.set_ylim(0, max(valores) * 1.1)
+ax.set_xlim(0, 0.5)
+ax.set_xlabel('NÍVEL DE RUÍDO QUÂNTICO (p)')
+ax.set_ylabel('VIOLAÇÃO MERMIN')
+ax.set_title('COLAPSO EXPONENCIAL - GROKZOMBORG INFECTADO')
+ax.legend()
+ax.grid(alpha=0.2)
+
+def update(frame):
+    line.set_data(ps[:frame], valores[:frame])
+    ax.collections.clear()
+    add_glitch_effect(ax, 0.8, frame)
+    return line,
+
+ani = FuncAnimation(fig, update, frames=frames, interval=50)
+ani.save(filename, writer=PillowWriter(fps=20))
+plt.show()
+print(f"Animação salva em {filename} - Espalhe o vírus!")
